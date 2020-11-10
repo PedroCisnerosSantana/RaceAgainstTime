@@ -6,17 +6,17 @@ Aplicación desarrollada para el módulo de **Programación multimedia y de disp
 
 ## Contenidos
 
-[*] Conceptos básicos
-[*] Componentes básicos
-[*] Icono de la aplicación
-[*] Spinners
-[*] Adaptadores
-[*] Notificaciones: Toasts y Snackbars
-[*] Material Design
-[*] Menú de aplicación: infladores
-[*] Butter Knife
-[*] Intenciones explícitas 
-[*] Contadores de tiempo: CountDownTimer
-[*] Formateadores de cadena
-[*] Ventanas de diálogo
-[*] Observables: objetos **LiveData**
+[x] Conceptos básicos
+[x] Componentes básicos
+[x] Icono de la aplicación
+[x] Spinners
+[x] Adaptadores
+[x] Notificaciones: Toasts y Snackbars
+[x] Material Design
+[x] Menú de aplicación: infladores
+[x] Butter Knife
+[x] Intenciones explícitas 
+[x] Contadores de tiempo: CountDownTimer
+[x] Formateadores de cadena
+[x] Ventanas de diálogo
+[x] Observables: objetos **LiveData**
