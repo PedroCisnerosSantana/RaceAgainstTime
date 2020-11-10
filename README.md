@@ -23,3 +23,4 @@ Antonio J. Sánchez - curso 2020/21
 * [x] Formateadores de cadena
 * [x] Ventanas de diálogo
 * [x] Observables: objetos **LiveData**
+* [X] Orientación del dispositivo.
