@@ -10,10 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.PersistableBundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,6 +31,8 @@ import android.widget.TextView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.Observable;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -33,10 +42,10 @@ public class MainActivity extends AppCompatActivity
     private boolean jugando = false ;
 
     private int resto ;
-    private int limite_tiempo = 5000 ; // 20 segundos (expresamos en milisegundos)
+
+    private int limite_tiempo = 20000 ; // 20 segundos (expresamos en milisegundos)
 
     private MutableLiveData<Integer> puntuacion ;
-
     private CountDownTimer timer ;
 
     //
@@ -60,24 +69,30 @@ public class MainActivity extends AppCompatActivity
         // Vinculamos la clase MainActivity con la librería ButterKnife
         ButterKnife.bind(this) ;
 
+        SharedPreferences sp = getSharedPreferences("com.ajsb.rat.configuracion",Context.MODE_PRIVATE) ;
+        //SharedPreferences sp = getPreferences(Context.MODE_PRIVATE) ;
+        SharedPreferences.Editor editor = sp.edit() ;
+        editor.putInt("limite", limite_tiempo) ;
+        editor.apply() ;
+
         // Instanciamos los elementos del layout
         //button = findViewById(R.id.button) ;
         //score  = findViewById(R.id.score) ;
 
         // Creamos la variable LiveData
-        puntuacion = new MutableLiveData<>() ;
+        //puntuacion = new MutableLiveData<>() ;
 
         // Inicializamos el valor de la puntuación
-        puntuacion.setValue(0) ;
+        //puntuacion.setValue(0) ;
 
         // Definimos el observador
-        puntuacion.observe(this, new Observer<Integer>() {
+        /*puntuacion.observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer)
             {
                 score.setText(String.valueOf(integer)) ;
             }
-        }) ;
+        }) ;*/
 
         // Asignamos funcionalidad al botón
         button.setOnClickListener((v) ->
@@ -99,7 +114,8 @@ public class MainActivity extends AppCompatActivity
         timer.cancel() ;
 
         // Calculamos la puntuación
-        puntuacion.setValue(100) ;
+        puntuacion.setValue(puntuacion.getValue()+100) ;
+
         // puntuacion +=  100 ;
         //Log.i("RATIME", resto + ", " + limite_tiempo + ", " + ((limite_tiempo / resto) * 100)) ;
 
@@ -155,7 +171,7 @@ public class MainActivity extends AppCompatActivity
 
                 // Restamos puntos
                 //puntuacion -= 200 ;
-                puntuacion.setValue(-200) ;
+                puntuacion.setValue(puntuacion.getValue()-200) ;
 
                 // Mostrar puntuación
                 //score.setText(String.valueOf(puntuacion)) ;
@@ -191,8 +207,14 @@ public class MainActivity extends AppCompatActivity
         // La opción elegida es la correspondiente al menú Información
         if(item.getItemId()==R.id.menuInfo)
         {
+            // Creamos un diccionario
+            //Bundle dic = new Bundle() ;
+            //dic.putInt("limite", limite_tiempo) ;
+
             // Lanzar la nueva actividad
             Intent intent = new Intent(this, InfoActivity.class) ;
+            //intent.putExtra("limite", limite_tiempo) ;
+            //intent.putExtra("info", dic) ;
             startActivity(intent) ;
 
             //
@@ -202,4 +224,28 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * @param outState
+     * @param outPersistentState
+     */
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState,
+                                    @NonNull PersistableBundle outPersistentState)
+    {
+        outState.putInt("puntos", 9999) ;
+        super.onSaveInstanceState(outState, outPersistentState);
+    }
+
+    /**
+     * @param savedInstanceState
+     */
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState)
+    {
+        //
+        puntuacion.setValue(savedInstanceState.getInt("puntos")) ;
+
+        //
+        super.onRestoreInstanceState(savedInstanceState);
+    }
 }
