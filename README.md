@@ -1,10 +1,13 @@
+<p><img src="https://github.com/bilbobolson/RaceAgainstTime/blob/master/app/src/main/res/drawable-v24/rat_logo.png" width="400"></p>
+
 # Race Against Time
-Aplicación desarrollada para el módulo de **Programación multimedia y de dispositivos móviles**. 
+Aplicación desarrollada para el módulo de **Programación multimedia y de dispositivos móviles**.<br/> 
+Antonio J. Sánchez - curso 2020/21
 
-**Race Against Time** reta al jugador a competir contra el tiempo. Cuando el juego comienza, se inicia el temporizador y el jugador deberá detenerlo lo más cerca posible del final. Cuánto más afines la puntería, más puntuación consigues.
+## Instrucciones del juego
+**Race Against Time** reta al jugador a competir contra el tiempo. Cuando el juego comienza se inicia el temporizador y el jugador deberá detenerlo lo más cerca posible del final. Cuánto más afine la puntería, más puntuación consiguirá.
 
-
-## Contenidos
+## Contenidos desarrollados
 
 * [x] Conceptos básicos
 * [x] Componentes básicos
@@ -20,3 +23,4 @@ Aplicación desarrollada para el módulo de **Programación multimedia y de disp
 * [x] Formateadores de cadena
 * [x] Ventanas de diálogo
 * [x] Observables: objetos **LiveData**
+* [X] Orientación del dispositivo.
