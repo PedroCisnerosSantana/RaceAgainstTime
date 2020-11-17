@@ -10,13 +10,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.PersistableBundle;
@@ -25,13 +22,16 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.ajsb.rat.database.Configuracion;
+import com.ajsb.rat.database.Database;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.Observable;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,11 +42,11 @@ public class MainActivity extends AppCompatActivity
     private boolean jugando = false ;
 
     private int resto ;
-
-    private int limite_tiempo = 20000 ; // 20 segundos (expresamos en milisegundos)
+    private int limite_tiempo = 20 ; // 20 segundos (expresamos en milisegundos)
 
     private MutableLiveData<Integer> puntuacion ;
     private CountDownTimer timer ;
+    private SharedPreferences sp ;
 
     //
     @BindView(R.id.button)
@@ -69,30 +69,33 @@ public class MainActivity extends AppCompatActivity
         // Vinculamos la clase MainActivity con la librería ButterKnife
         ButterKnife.bind(this) ;
 
-        SharedPreferences sp = getSharedPreferences("com.ajsb.rat.configuracion",Context.MODE_PRIVATE) ;
-        //SharedPreferences sp = getPreferences(Context.MODE_PRIVATE) ;
+        sp = getSharedPreferences("com.ajsb.rat.configuracion",Context.MODE_PRIVATE) ;
+        //sp = getPreferences(Context.MODE_PRIVATE) ;
         SharedPreferences.Editor editor = sp.edit() ;
         editor.putInt("limite", limite_tiempo) ;
         editor.apply() ;
+
+        // Lanzamos animación
+        button.startAnimation(AnimationUtils.loadAnimation(this, R.anim.bounce)); ;
 
         // Instanciamos los elementos del layout
         //button = findViewById(R.id.button) ;
         //score  = findViewById(R.id.score) ;
 
         // Creamos la variable LiveData
-        //puntuacion = new MutableLiveData<>() ;
+        puntuacion = new MutableLiveData<>() ;
 
         // Inicializamos el valor de la puntuación
-        //puntuacion.setValue(0) ;
+        puntuacion.setValue(0) ;
 
         // Definimos el observador
-        /*puntuacion.observe(this, new Observer<Integer>() {
+        puntuacion.observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer)
             {
                 score.setText(String.valueOf(integer)) ;
             }
-        }) ;*/
+        }) ;
 
         // Asignamos funcionalidad al botón
         button.setOnClickListener((v) ->
@@ -100,6 +103,16 @@ public class MainActivity extends AppCompatActivity
             if (!jugando) iniciarJuego(v) ;
             else          detenerJuego(v) ;
         });
+    }
+
+    /**
+     */
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+        limite_tiempo = sp.getInt("limite", 20) ;
+        Log.i("XXXX", String.valueOf(limite_tiempo)) ;
     }
 
     /**
@@ -140,7 +153,7 @@ public class MainActivity extends AppCompatActivity
                 .show() ;
 
         // Creamos el contador de tiempo
-        timer = new CountDownTimer(limite_tiempo, 1000)
+        timer = new CountDownTimer(limite_tiempo * 1000, 1000)
         {
             @Override
             public void onTick(long millisUntilFinished)
@@ -215,7 +228,7 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(this, InfoActivity.class) ;
             //intent.putExtra("limite", limite_tiempo) ;
             //intent.putExtra("info", dic) ;
-            startActivity(intent) ;
+            startActivity(intent); ;
 
             //
             return true ;
@@ -223,6 +236,8 @@ public class MainActivity extends AppCompatActivity
 
         return super.onOptionsItemSelected(item);
     }
+
+
 
     /**
      * @param outState

@@ -49,6 +49,9 @@ public class InfoActivity extends AppCompatActivity
         // Regresamos a la actividad anterior al pulsar el botón
         button.setOnClickListener((v) ->
         {
+            Integer l = Integer.parseInt(limite.getText().toString()) ;
+            sp.edit().putInt("limite", l).apply() ;
+
             setResult(66) ;
             finish() ;
             return ;
